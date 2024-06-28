@@ -1,7 +1,9 @@
 ﻿using Blog_Project.Migrations;
 using Blog_Project.Models.Domain;
 using Blog_Project.Models.DTO;
+using Blog_Project.Repositories.implementation;
 using Blog_Project.Repositories.Interface;
+using Blog_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +14,20 @@ namespace Blog_Project.Controllers
     [ApiController]
     public class ImageController : ControllerBase
     {
-        private readonly IImageRepositery imageRepositery;
+        
+        public IUnitOfWork UnitOfWork { get; }
+        
 
-        public ImageController(IImageRepositery imageRepositery)
+        public ImageController(IUnitOfWork UnitOfWork)
         {
-            this.imageRepositery = imageRepositery;
+            this.UnitOfWork = UnitOfWork;
+            
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllImages()
         {
-            var images = await imageRepositery.GetAllImages();
+            var images = await UnitOfWork.BlogImages.FindAllAsync(b => b.Title.Contains(""));
             var respone = new List<BlogImageDto>();
 
             foreach (var blogimage in images)
@@ -41,7 +46,7 @@ namespace Blog_Project.Controllers
             return Ok(respone);
         }
         [HttpPost]
-        [Authorize(Roles = "Writer")]
+        // [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromForm] string filename, [FromForm] string title)
         {
             if(ModelState.IsValid)
@@ -53,7 +58,8 @@ namespace Blog_Project.Controllers
                     DateCreated = DateTime.Now,
                 };
 
-                blogimage = await imageRepositery.UploadImage(file, blogimage);
+                blogimage = await UnitOfWork.BlogImages.UploadImage(file, blogimage);
+                UnitOfWork.Complete();
                 var response = new BlogImageDto
                 {
                     Id = blogimage.Id,

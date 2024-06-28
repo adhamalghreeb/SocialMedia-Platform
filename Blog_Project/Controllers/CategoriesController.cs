@@ -4,6 +4,7 @@ using Blog_Project.Data;
 using Blog_Project.Models.Domain;
 using Blog_Project.Models.DTO;
 using Blog_Project.Repositories.Interface;
+using Blog_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +16,18 @@ namespace Blog_Project.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository categoryRepository;
+        
+        
 
         public IMapper Mapper { get; }
+        public IUnitOfWork UnitOfWork { get; }
 
-        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoriesController(IMapper mapper, IBaseRepository<Category> baseRepository, IUnitOfWork unitOfWork)
         {
-            this.categoryRepository = categoryRepository;
+            
             Mapper = mapper;
+            
+            UnitOfWork = unitOfWork;
         }
 
         [HttpPost]
@@ -34,7 +39,8 @@ namespace Blog_Project.Controllers
                 UrlHandle = requset.UrlHandle,
             };
 
-            await categoryRepository.CreateAsync(category);
+            await UnitOfWork.Categories.Add(category);
+            UnitOfWork.Complete();
 
             var response = Mapper.Map<CategoryDto>(category);
 
@@ -42,7 +48,7 @@ namespace Blog_Project.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories(
+        public async Task<IActionResult> GetAllCategories( // modify
             [FromQuery] string? query,
             [FromQuery] string? sortBy,
             [FromQuery] string? sortDirection,
@@ -50,7 +56,7 @@ namespace Blog_Project.Controllers
             [FromQuery] int? pageSize
             )
         {
-            var categories = await categoryRepository.GetAllAsync(query, sortBy, sortDirection, pageNumber, pageSize);
+            var categories = await UnitOfWork.Categories.GetAllAsync(query, sortBy, sortDirection, pageNumber, pageSize);
 
             var response = Mapper.Map<List<CategoryDto>>(categories);
 
@@ -62,7 +68,7 @@ namespace Blog_Project.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> GetCategoryById(Guid id)
         {
-            var response = await categoryRepository.GetByIdAsync(id);
+            var response = await UnitOfWork.Categories.GetById(id);
             if(response is null)
             {
                 return NotFound();
@@ -77,18 +83,19 @@ namespace Blog_Project.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
-        [Authorize(Roles = "Writer")]
+        // [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateCategory(Guid id ,UpdateCategoryRequest category)
         {
             var cat = new Category { Id = id, Name = category.Name, UrlHandle = category.UrlHandle };
 
-            var response = await categoryRepository.Update(cat);
+            var response = await UnitOfWork.Categories.Update(cat);
             if(response is null)
             {
                 return NotFound();
             }
+            UnitOfWork.Complete();
 
-            var categoryDto = Mapper.Map<CategoryDto>(category);
+            var categoryDto = Mapper.Map<CategoryDto>(cat);
             categoryDto.Id = id;
 
             return Ok(categoryDto);
@@ -97,13 +104,19 @@ namespace Blog_Project.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
-        [Authorize(Roles = "Writer")]
+        // [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
-            var category = await categoryRepository.DeleteCategory(id);
-            if (category is null) { return NotFound(); }
+            var response = await UnitOfWork.Categories.GetById(id);
+            if (response is null)
+            {
+                return NotFound();
+            }
 
-            var respone = Mapper.Map<CategoryDto>(category);
+            UnitOfWork.Categories.Delete(response);
+            UnitOfWork.Complete();
+
+            var respone = Mapper.Map<CategoryDto>(response);
 
             return Ok(respone);
         }

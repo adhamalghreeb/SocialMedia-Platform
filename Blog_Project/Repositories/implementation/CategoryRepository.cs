@@ -25,10 +25,11 @@ namespace Blog_Project.Repositories.implementation
         public async Task<Category> DeleteCategory(Guid id)
         {
             var cate = await dbcontext.categories.FirstOrDefaultAsync(c => c.Id == id);
-            if (cate is null) { 
-                return null; 
+            if (cate is null)
+            {
+                return null;
             }
-            
+
             dbcontext.categories.Remove(cate);
             return cate;
 
@@ -40,7 +41,7 @@ namespace Blog_Project.Repositories.implementation
             var categories = dbcontext.categories.AsQueryable();
 
             // filter
-            if(string.IsNullOrWhiteSpace(query) == false)
+            if (string.IsNullOrWhiteSpace(query) == false)
             {
                 categories = categories.Where(x => x.Name.Contains(query));
             }
@@ -77,7 +78,7 @@ namespace Blog_Project.Repositories.implementation
         public async Task<Category?> Update(Category category)
         {
             var cat = await dbcontext.categories.FirstOrDefaultAsync(x => x.Id == category.Id);
-            if(cat is not null)
+            if (cat is not null)
             {
                 dbcontext.Entry(cat).CurrentValues.SetValues(category);
                 dbcontext.SaveChanges();

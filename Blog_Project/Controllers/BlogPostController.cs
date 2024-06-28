@@ -1,8 +1,10 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
+using Azure.Core;
 using Blog_Project.Models.Domain;
 using Blog_Project.Models.DTO;
 using Blog_Project.Repositories.implementation;
 using Blog_Project.Repositories.Interface;
+using Blog_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,16 +17,21 @@ namespace Blog_Project.Controllers
     
     public class BlogPostController : ControllerBase
     {
-        private readonly IBlogPostRepository blogPostRepository;
-        private readonly ICategoryRepository categoryRepository;
-        public BlogPostController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
+        
+        public IMapper Mapper { get; }
+        
+        public IUnitOfWork UnitOfWork { get; }
+
+        public BlogPostController(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            this.blogPostRepository = blogPostRepository;
-            this.categoryRepository = categoryRepository;
+            
+            Mapper = mapper;
+            
+            UnitOfWork = unitOfWork;
         }
 
         [HttpPost]
-        [Authorize(Roles = "Writer")]
+        // [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateBlogPost(CreateBlogPostRequestDto request)
         {
             var blogPost = new BlogPost
@@ -42,14 +49,15 @@ namespace Blog_Project.Controllers
 
             foreach (var item in request.Categories)
             {
-                var exisit = await categoryRepository.GetByIdAsync(item);
+                var exisit = await UnitOfWork.Categories.GetById(item);
                 if(exisit is not null)
                 {
                     blogPost.Categories.Add(exisit);
                 }
             }
 
-            blogPost = await blogPostRepository.CreateAsync(blogPost);
+            blogPost = await UnitOfWork.BlogPosts.Add(blogPost);
+            UnitOfWork.Complete();
             var response = new BlogPostDto
             {
                 Id = blogPost.Id,
@@ -72,7 +80,7 @@ namespace Blog_Project.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBlogs()
         {
-            var blogPosts = await blogPostRepository.GetAllAsync();
+            var blogPosts = await UnitOfWork.BlogPosts.FindAll(b => b.Title.Contains(""), new[] { "Categories" });
             var response = new List<BlogPostDto>();
             foreach (var blogPost in blogPosts)
             {
@@ -98,7 +106,7 @@ namespace Blog_Project.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> GetBlogById(Guid id)
         {
-            var blogPost = await blogPostRepository.GetByIdAsync(id);
+            var blogPost = await UnitOfWork.BlogPosts.GetById(id , new string[] { "Categories" });
             if (blogPost is null)
             {
                 return NotFound();
@@ -127,7 +135,7 @@ namespace Blog_Project.Controllers
         [Route("{urlHandle}")]
         public async Task<IActionResult> GetBlogByUrl([FromRoute] string urlHandle)
         {
-            var blogPost = await blogPostRepository.GetByUrlAsync(urlHandle);
+            var blogPost = await UnitOfWork.BlogPosts.GetByUrlAsync(urlHandle);
             if (blogPost is null)
             {
                 return NotFound();
@@ -154,7 +162,7 @@ namespace Blog_Project.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
-        [Authorize(Roles = "Writer")]
+        // [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateBlog(Guid id, UpdateBlogPostRequestDTO request)
         {
             var blogPost = new BlogPost
@@ -173,7 +181,7 @@ namespace Blog_Project.Controllers
 
             foreach (var categoryGuid in request.Categories)
             {
-                var existingCategory = await categoryRepository.GetByIdAsync(categoryGuid);
+                var existingCategory = await UnitOfWork.Categories.GetById(categoryGuid);
 
                 if (existingCategory != null)
                 {
@@ -181,12 +189,13 @@ namespace Blog_Project.Controllers
                 }
             }
 
-            var updatedBlogPost = await blogPostRepository.Update(blogPost);
+            var updatedBlogPost = await UnitOfWork.BlogPosts.Update(blogPost);
 
             if (updatedBlogPost == null)
             {
                 return NotFound();
             }
+            UnitOfWork.Complete();
 
             // Convert Domain model back to DTO
             var response = new BlogPostDto
@@ -213,14 +222,17 @@ namespace Blog_Project.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
-        [Authorize(Roles = "Writer")]
+        // [Authorize(Roles = "Writer")]
         public async Task<IActionResult> deleteBlog(Guid id)
         {
-            var blogPost = await blogPostRepository.Delete(id);
-            if (blogPost == null)
+            var blogPost = await UnitOfWork.BlogPosts.GetById(id);
+            if (blogPost is null)
             {
                 return NotFound();
             }
+
+            UnitOfWork.BlogPosts.Delete(blogPost);
+            UnitOfWork.Complete();
 
             var response = new BlogPostDto
             {
@@ -237,7 +249,6 @@ namespace Blog_Project.Controllers
 
             return Ok(response);
         }
-
         
 
     }
