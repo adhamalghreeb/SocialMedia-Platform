@@ -25,6 +25,15 @@ namespace Blog_Project
             CreateMap<Category, UpdateCategoryRequest>()
                 .ReverseMap();
 
+            CreateMap<CommentDTO, Comment>()
+                .ReverseMap()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.UserName));
+
+            CreateMap<Comment, CreateCommentRequest>()
+                .ReverseMap();
+
+            CreateMap<EditCommentRequest, Comment>()
+                .ReverseMap();
 
         }
 

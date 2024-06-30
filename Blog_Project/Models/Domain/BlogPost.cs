@@ -13,5 +13,6 @@
         public bool IsVisible { get; set; }
 
         public ICollection<Category> Categories { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

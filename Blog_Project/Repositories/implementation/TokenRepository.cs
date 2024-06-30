@@ -21,6 +21,7 @@ namespace Blog_Project.Repositories.implementation
             // create claims
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, identityusre.Id),
                 new Claim(ClaimTypes.Email, identityusre.Email)
             };
             claims.AddRange(roles.Select(rolse => new Claim(ClaimTypes.Role, rolse)));
