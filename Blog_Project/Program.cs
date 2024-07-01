@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Blog_Project.Repository;
+using Blog_Project.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddSignalR();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -77,7 +78,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+builder.Services.AddSingleton<SharedDataBase>();
 
 var app = builder.Build();
 
@@ -97,6 +101,8 @@ app.UseCors(options =>
     options.AllowAnyHeader();
 });
 
+app.MapHub<ChatHub>("chat-hub");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles( new StaticFileOptions
@@ -106,5 +112,6 @@ app.UseStaticFiles( new StaticFileOptions
 });
 
 app.MapControllers();
+
 
 app.Run();

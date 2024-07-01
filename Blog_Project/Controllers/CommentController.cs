@@ -65,7 +65,6 @@ namespace Blog_Project.Controllers
             
             var comment = new Comment
             {
-      
                 Content = createCommentRequest.Content,
                 DateCreated = DateTime.UtcNow,
                 BlogPostId = createCommentRequest.BlogPostId,

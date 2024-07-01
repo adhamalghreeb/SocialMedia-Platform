@@ -143,3 +143,13 @@ D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.Extensions.Iden
 D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\Projects\Blog_Project\Blog_Project\obj\Debug\net8.0\Blog_Pro.23CAFAF1.Up2Date
 D:\Projects\Blog_Project\Blog_Project\obj\Debug\net8.0\Blog_Project.sourcelink.json
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Projects\Blog_Project\Blog_Project\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
