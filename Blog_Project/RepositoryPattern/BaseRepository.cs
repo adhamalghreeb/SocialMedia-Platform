@@ -93,6 +93,17 @@ namespace Blog_Project.Repository
             return await query.Where(criteria).ToListAsync();
         }
 
+        public async Task<T> Find(Expression<Func<T, bool>> criteria, string[] includes = null)
+        {
+            IQueryable<T> query = appDBcontext.Set<T>();
+
+            if (includes != null)
+                foreach (var include in includes)
+                    query = query.Include(include);
+
+            return await query.FirstOrDefaultAsync(criteria);
+        }
+
 
 
     }

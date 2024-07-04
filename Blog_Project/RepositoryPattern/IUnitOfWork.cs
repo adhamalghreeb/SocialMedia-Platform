@@ -10,6 +10,7 @@ namespace Blog_Project.Repository
         public ICategory Categories { get; }
         public IBlogImage BlogImages { get; }
         public IBaseRepository<Comment> comments { get; }
+        public IBaseRepository<follow> follows { get; }
 
 
         public int Complete();

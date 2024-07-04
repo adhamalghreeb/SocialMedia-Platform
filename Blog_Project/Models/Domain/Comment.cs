@@ -10,6 +10,6 @@ namespace Blog_Project.Models.Domain
         public Guid BlogPostId { get; set; }
         public BlogPost BlogPost { get; set; }
         public string UserId { get; set; }
-        public IdentityUser User { get; set; }
+        public AppUser User { get; set; }
     }
 }

@@ -35,6 +35,12 @@ namespace Blog_Project
             CreateMap<EditCommentRequest, Comment>()
                 .ReverseMap();
 
+            CreateMap<follow, FollowerDTO>()
+                .ReverseMap();
+
+            CreateMap<AppUser, FollowerDTO>()
+            .ReverseMap();
+
         }
 
     }

@@ -18,6 +18,8 @@ namespace Blog_Project.Repository
 
         public Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null);
 
+        public Task<T> Find(Expression<Func<T, bool>> criteria, string[] includes = null);
+
 
 
     }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Blog_Project.Repository;
 using Blog_Project.Hubs;
+using Blog_Project.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,11 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<PermissionBasedAuthFilter>();
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -35,7 +41,7 @@ builder.Services.AddDbContext<appDBcontext>(options =>
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));    
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
 });
 
 
@@ -105,7 +111,7 @@ app.MapHub<ChatHub>("chat-hub");
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseStaticFiles( new StaticFileOptions
+app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
     RequestPath = "/Images"

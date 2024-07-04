@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using Blog_Project.Attributes;
 using Blog_Project.Models.Domain;
 using Blog_Project.Models.DTO;
 using Blog_Project.Repositories.implementation;
@@ -26,7 +27,6 @@ namespace Blog_Project.Controllers
         {
             
             Mapper = mapper;
-            
             UnitOfWork = unitOfWork;
         }
 
@@ -77,7 +77,9 @@ namespace Blog_Project.Controllers
 
         }
 
+        // implementing custom Permission filter
         [HttpGet]
+        [CheckPerm(Permission.Read)]
         public async Task<IActionResult> GetAllBlogs()
         {
             var blogPosts = await UnitOfWork.BlogPosts.FindAll(b => b.Title.Contains(""), new[] { "Categories" });

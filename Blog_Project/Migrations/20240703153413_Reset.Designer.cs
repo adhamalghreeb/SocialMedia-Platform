@@ -4,6 +4,7 @@ using Blog_Project.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog_Project.Migrations
 {
     [DbContext(typeof(appDBcontext))]
-    partial class appDBcontextModelSnapshot : ModelSnapshot
+    [Migration("20240703153413_Reset")]
+    partial class Reset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace Blog_Project.Migrations
                     b.ToTable("BlogPostCategory");
                 });
 
-            modelBuilder.Entity("Blog_Project.Models.Domain.AppUser", b =>
+            modelBuilder.Entity("Blog_Project.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -86,7 +89,7 @@ namespace Blog_Project.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("appUsers");
                 });
 
             modelBuilder.Entity("Blog_Project.Models.Domain.BlogImage", b =>
@@ -221,21 +224,6 @@ namespace Blog_Project.Migrations
                     b.ToTable("UserPermissions");
                 });
 
-            modelBuilder.Entity("Blog_Project.Models.Domain.follow", b =>
-                {
-                    b.Property<string>("FollowerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FolloweeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FollowerId", "FolloweeId");
-
-                    b.HasIndex("FolloweeId");
-
-                    b.ToTable("follows");
-                });
-
             modelBuilder.Entity("BlogPostCategory", b =>
                 {
                     b.HasOne("Blog_Project.Models.Domain.BlogPost", null)
@@ -259,7 +247,7 @@ namespace Blog_Project.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Blog_Project.Models.Domain.AppUser", "User")
+                    b.HasOne("Blog_Project.Models.AppUser", "User")
                         .WithMany("comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -272,7 +260,7 @@ namespace Blog_Project.Migrations
 
             modelBuilder.Entity("Blog_Project.Models.Domain.UserPermissions", b =>
                 {
-                    b.HasOne("Blog_Project.Models.Domain.AppUser", "User")
+                    b.HasOne("Blog_Project.Models.AppUser", "User")
                         .WithMany("userPermissions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -281,31 +269,8 @@ namespace Blog_Project.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Blog_Project.Models.Domain.follow", b =>
+            modelBuilder.Entity("Blog_Project.Models.AppUser", b =>
                 {
-                    b.HasOne("Blog_Project.Models.Domain.AppUser", "Followee")
-                        .WithMany("Followers")
-                        .HasForeignKey("FolloweeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Blog_Project.Models.Domain.AppUser", "Follower")
-                        .WithMany("Followees")
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Followee");
-
-                    b.Navigation("Follower");
-                });
-
-            modelBuilder.Entity("Blog_Project.Models.Domain.AppUser", b =>
-                {
-                    b.Navigation("Followees");
-
-                    b.Navigation("Followers");
-
                     b.Navigation("comments");
 
                     b.Navigation("userPermissions");

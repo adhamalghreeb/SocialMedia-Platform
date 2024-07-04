@@ -15,6 +15,7 @@ namespace Blog_Project.Repository
         public IBlogImage BlogImages { get; private set; }
 
         public IBaseRepository<Comment> comments { get; private set; }
+        public IBaseRepository<follow> follows { get; private set; }
 
         public UnitOfWork(appDBcontext appDBcontext, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
@@ -25,6 +26,7 @@ namespace Blog_Project.Repository
             Categories = new CategoryRepo(appDBcontext);
             BlogImages = new BlogImageRepo(appDBcontext, webHostEnvironment, httpContextAccessor);
             comments = new BaseRepository<Comment>(appDBcontext);
+            follows = new BaseRepository<follow>(appDBcontext);
         }
         public int Complete()
         {
