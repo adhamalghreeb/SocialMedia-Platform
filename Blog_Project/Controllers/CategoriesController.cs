@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
-using Azure;
-using Blog_Project.Data;
-using Blog_Project.Models.Domain;
-using Blog_Project.Models.DTO;
-using Blog_Project.Repositories.Interface;
-using Blog_Project.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Blog_Project.CORE;
+using Blog_Project.CORE.@interface;
+using Blog_Project.CORE.Models.Domain;
+using Blog_Project.CORE.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Blog_Project.Controllers
 {

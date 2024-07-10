@@ -1,4 +1,4 @@
-﻿using Blog_Project.Models.Domain;
+﻿using Blog_Project.CORE.Models.Domain;
 
 namespace Blog_Project.Attributes
 {

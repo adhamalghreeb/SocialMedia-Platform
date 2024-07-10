@@ -1,5 +1,5 @@
-﻿using Blog_Project.Models.DTO;
-using Blog_Project.Repositories.Interface;
+﻿using Blog_Project.CORE.@interface;
+using Blog_Project.CORE.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

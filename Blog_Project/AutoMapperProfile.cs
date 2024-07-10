@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Blog_Project.Models.Domain;
-using Blog_Project.Models.DTO;
+using Blog_Project.CORE.Models.Domain;
+using Blog_Project.CORE.Models.DTO;
 
 namespace Blog_Project
 {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Blog_Project.CORE;
+using Blog_Project.CORE.Models.DTO;
 using Blog_Project.Migrations;
-using Blog_Project.Models.Domain;
-using Blog_Project.Models.DTO;
-using Blog_Project.Repository;
+using Blog_Project.CORE.Models.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

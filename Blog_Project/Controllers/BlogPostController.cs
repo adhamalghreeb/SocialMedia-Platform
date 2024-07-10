@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using Blog_Project.Attributes;
-using Blog_Project.Models.Domain;
-using Blog_Project.Models.DTO;
+using Blog_Project.CORE;
+using Blog_Project.CORE.Models.Domain;
+using Blog_Project.CORE.Models.DTO;
 using Blog_Project.Repositories.implementation;
 using Blog_Project.Repositories.Interface;
-using Blog_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

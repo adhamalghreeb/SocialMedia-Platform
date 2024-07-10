@@ -1,6 +1,7 @@
-﻿using Blog_Project.Data;
-using Blog_Project.Models.Domain;
+﻿using Blog_Project.CORE.Models.Domain;
+using Blog_Project.EF.Data;
 using Blog_Project.Repositories.Interface;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog_Project.Repositories.implementation

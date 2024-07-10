@@ -1,5 +1,5 @@
-﻿using Blog_Project.Data;
-using Blog_Project.Models.Domain;
+﻿using Blog_Project.CORE.Models.Domain;
+using Blog_Project.EF.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;

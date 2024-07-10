@@ -1,7 +1,4 @@
 using Blog_Project;
-using Blog_Project.Data;
-using Blog_Project.Repositories.implementation;
-using Blog_Project.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using AutoMapper;
@@ -10,9 +7,12 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Blog_Project.Repository;
 using Blog_Project.Hubs;
 using Blog_Project.Filters;
+using Blog_Project.EF.Data;
+using Blog_Project.EF.RepositoryPattern;
+using Blog_Project.CORE;
+using Blog_Project.CORE.@interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,12 +36,14 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<appDBcontext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"),
+    b => b.MigrationsAssembly(typeof(appDBcontext).Assembly.FullName));
 });
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"),
+        b => b.MigrationsAssembly(typeof(appDBcontext).Assembly.FullName));
 });
 
 

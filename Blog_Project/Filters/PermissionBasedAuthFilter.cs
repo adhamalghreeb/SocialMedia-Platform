@@ -1,6 +1,6 @@
 ﻿using Blog_Project.Attributes;
-using Blog_Project.Data;
-using Blog_Project.Models.Domain;
+using Blog_Project.CORE.Models.Domain;
+using Blog_Project.EF.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -36,7 +36,7 @@ namespace Blog_Project.Filters
                     }
                 }
             }
-            
+
         }
     }
 }
