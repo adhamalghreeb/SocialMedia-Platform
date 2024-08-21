@@ -31,3 +31,6 @@ This project leverages several key frameworks and libraries:
 - **.NET Identity:** Handles user authentication and authorization.
 - **SignalR:** Implements real-time communication for features like live chat.
 - **JWT Tokens:** Used for secure authentication.
+
+## Postman Collection
+[CLICK HERE](https://bold-comet-694976.postman.co/workspace/Adham~a9982b35-3b70-4532-b091-d62cfad764ec/collection/27192385-0727a7c2-3e5d-48bb-a24c-744dd8d66f28?action=share&creator=27192385 "public postman collection")
